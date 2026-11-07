@@ -146,7 +146,6 @@ const highlights = [
   ...highlightsFor('.review-grid .stars', gleam, 540),
   ...highlightsFor('.guarantee-seal', gleam, 720),
   ...highlightsFor('#guarantee-title', rise, 440),
-  ...highlightsFor('.final-cta .cta', forwardPulse(12, .54), 1150, true),
 ];
 
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');

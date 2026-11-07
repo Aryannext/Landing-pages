@@ -37,6 +37,8 @@ function renderPacks() {
     </button>
     ${i === selectedPack ? `<div class="variant-rows"><div class="selected-detail"><strong>${pack.quantity} ${pack.quantity === 1 ? 'copa' : 'copas'} · Crema dorado</strong><span>TPE suave · Uso manual sin pilas</span></div></div>` : ''}</div>`).join('');
   document.querySelectorAll('[data-total]').forEach(element => element.textContent = money(packOptions[selectedPack].price));
+  const quantity = packOptions[selectedPack].quantity;
+  document.querySelectorAll('[data-recap]').forEach(element => element.textContent = `${quantity} ${quantity === 1 ? 'copa' : 'copas'} · Crema dorado`);
 }
 document.querySelector('#packs').addEventListener('click', event => {
   const button = event.target.closest('[data-pack]');
@@ -77,10 +79,43 @@ document.querySelectorAll('[data-open-order]').forEach(button => button.addEvent
     renderPacks();
     invalidateSummary();
   }
+  showOrderStep(1, false);
   orderDialog.showModal();
   orderDialog.scrollTop = 0;
   orderDialog.querySelector('.close-modal').focus({ preventScroll: true });
 }));
+
+// Two-step order dialog: summary first, then the form sliding in from the side.
+const stepSummary = document.querySelector('#step-summary');
+const stepForm = document.querySelector('#step-form');
+const orderReducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let currentOrderStep = 1;
+function showOrderStep(step, animate = true) {
+  if (step === currentOrderStep) return;
+  const forward = step > currentOrderStep;
+  const incoming = step === 1 ? stepSummary : stepForm;
+  const outgoing = step === 1 ? stepForm : stepSummary;
+  currentOrderStep = step;
+  stepSummary.getAnimations().concat(stepForm.getAnimations()).forEach(animation => animation.cancel());
+  incoming.hidden = false;
+  outgoing.style.position = '';
+  if (!animate || orderReducedMotion.matches) {
+    outgoing.hidden = true;
+  } else {
+    const options = { duration: 340, easing: 'cubic-bezier(.22,.8,.24,1)', fill: 'both' };
+    const shift = forward ? 100 : -100;
+    outgoing.style.position = 'absolute';
+    outgoing.style.inset = '0 0 auto 0';
+    outgoing.animate([{ transform: 'translateX(0)', opacity: 1 }, { transform: `translateX(${-shift}%)`, opacity: 0 }], options)
+      .finished.then(() => { if (currentOrderStep !== step) return; outgoing.hidden = true; outgoing.style.position = ''; }, () => {});
+    incoming.animate([{ transform: `translateX(${shift}%)`, opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], options)
+      .finished.then(animation => animation.cancel(), () => {});
+  }
+  orderDialog.scrollTop = 0;
+  if (animate) incoming.querySelector(step === 1 ? '.pack-choice[aria-pressed="true"]' : '.order-back')?.focus({ preventScroll: true });
+}
+document.querySelector('#order-next').addEventListener('click', () => showOrderStep(2));
+document.querySelector('#order-back').addEventListener('click', () => showOrderStep(1));
 document.querySelectorAll('dialog .close-modal').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
 orderDialog.addEventListener('close', () => lastTrigger?.focus({ preventScroll: true }));
 orderDialog.addEventListener('click', event => {
@@ -184,17 +219,20 @@ document.querySelectorAll('.wa-real-grid').forEach(grid => {
   }, 5500);
   updateToggle();
 });
-// Keep the original fixed CTA, showing it only when no complete inline CTA is visible.
-const sticky = document.querySelector('.sticky-cta');
-if (sticky && 'IntersectionObserver' in window) {
-  const visibleButtons = new Set();
-  const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (entry.intersectionRatio >= .75) visibleButtons.add(entry.target);
-      else visibleButtons.delete(entry.target);
-    }
-    sticky.hidden = visibleButtons.size > 0;
-  }, { threshold: [0, .75, 1] });
-  document.querySelectorAll('#landing [data-open-order]').forEach(button => observer.observe(button));
+// Fixed purchase bar: slides up only after the hero CTA has scrolled out of view above the viewport.
+const stickyBar = document.querySelector('.sticky-bar');
+const heroCta = document.querySelector('.hero-cta .cta');
+if (stickyBar && heroCta) {
+  stickyBar.inert = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      const passed = !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
+      stickyBar.classList.toggle('is-visible', passed);
+      stickyBar.inert = !passed;
+    }).observe(heroCta);
+  } else {
+    stickyBar.classList.add('is-visible');
+    stickyBar.inert = false;
+  }
 }
 renderPacks();

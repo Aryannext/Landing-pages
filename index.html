@@ -7,9 +7,9 @@
   <meta name="description" content="Copa de bienestar íntimo masculino. Envío incluido en Colombia y pago contra entrega.">
   <title>Copa de bienestar íntimo masculino</title>
   <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="borgona.css?v=lux-4">
-  <script type="module" src="app.js?v=lux-3"></script>
-  <script type="module" src="borgona.js?v=lux-4"></script>
+  <link rel="stylesheet" href="borgona.css?v=lux-5">
+  <script type="module" src="app.js?v=lux-5"></script>
+  <script type="module" src="borgona.js?v=lux-5"></script>
 </head>
 <body>
 <main id="landing" class="borgona-page">
@@ -150,9 +150,6 @@
     </div>
   </section>
 
-  <footer class="final-cta">
-    <button class="cta" data-open-order type="button"><span class="icon icon-cart" aria-hidden="true"></span><span>¡Lo quiero ahora!</span></button>
-  </footer>
 </main>
 
 <nav class="sticky-bar" aria-label="Compra rápida">
@@ -173,18 +170,29 @@
   <div class="order-top">
     <h1 id="order-heading">Tu pedido</h1>
     <button type="button" class="close-modal" aria-label="Cerrar formulario"><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/close.png" alt="" width="22" height="22"></span></button>
+  </div>
+  <form id="order-form">
+    <div class="order-steps">
+    <section class="order-step" id="step-summary" aria-label="Resumen de tu pedido">
     <ul class="order-perks" aria-label="Condiciones de compra">
       <li><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/local_shipping.png" alt="" width="22" height="22"></span>Envío gratis</li>
       <li><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/payments.png" alt="" width="22" height="22"></span>Pago contra entrega</li>
       <li><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/verified_user.png" alt="" width="22" height="22"></span>Garantía de 30 días hábiles</li>
     </ul>
-  </div>
-  <form id="order-form">
     <fieldset id="packs"><legend class="sr-only">Elige tu pack</legend></fieldset>
     <div class="summary" aria-live="polite">
       <div><span>Subtotal</span><strong data-total></strong></div>
       <div><span>Envío</span><strong>Gratis</strong></div>
       <div class="summary-total"><span>Total</span><strong data-total></strong></div>
+    </div>
+    <button class="order-next" id="order-next" type="button"><span>Confirmar pedido</span><span class="order-next-arrow" aria-hidden="true">→</span></button>
+    </section>
+
+    <section class="order-step" id="step-form" aria-label="Datos de envío" hidden>
+    <button class="order-back" id="order-back" type="button"><span aria-hidden="true">←</span> Cambiar pedido</button>
+    <div class="order-recap">
+      <div><strong data-recap>1 copa</strong><span>Envío gratis · Pago contra entrega</span></div>
+      <strong data-total></strong>
     </div>
     <h2 class="shipping-title"><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/shopping_bag.png" alt="" width="22" height="22"></span>Pide contra entrega aquí</h2>
     <div class="fields">
@@ -217,6 +225,8 @@
       <a id="whatsapp-link" href="https://wa.me/573124968593" target="_blank" rel="noopener noreferrer"><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/chat.png" alt="" width="22" height="22"></span>Abrir WhatsApp</a>
       <label for="order-message">Resumen del pedido</label>
       <textarea id="order-message" readonly rows="10"></textarea>
+    </div>
+    </section>
     </div>
   </form>
 </dialog>
