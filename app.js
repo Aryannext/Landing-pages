@@ -19,7 +19,7 @@ const packOptions = PRODUCT.packs.map((pack, i) => ({ ...pack,
   title: ['COMPRA 1 UNIDAD (IDEAL PARA PROBAR)', 'COMPRA 2 UNIDADES (PACK RECOMENDADO)', 'COMPRA 3 UNIDADES (MÁXIMO AHORRO)'][i],
   badge: ['PRECIO ESPECIAL', 'PACK RECOMENDADO', 'MEJOR PRECIO'][i], type: ['', 'popular', 'saving'][i],
 }));
-let selectedPack = 0;
+let selectedPack = 1;
 let lastTrigger;
 let locations = {};
 function invalidateSummary() {
@@ -45,6 +45,23 @@ document.querySelector('#packs').addEventListener('click', event => {
   renderPacks();
   invalidateSummary();
   document.querySelector(`[data-pack="${selectedPack}"]`).focus({ preventScroll: true });
+  // Also sync landing page card elevation
+  document.querySelectorAll('[data-pack-card]').forEach(c => {
+    c.classList.toggle('is-selected', Number(c.dataset.packCard) === selectedPack);
+  });
+});
+
+// Interactive elevation and selection for landing page offer cards
+const landingOfferCards = document.querySelectorAll('[data-pack-card]');
+landingOfferCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const packIdx = Number(card.dataset.packCard);
+    landingOfferCards.forEach(c => c.classList.remove('is-selected'));
+    card.classList.add('is-selected');
+    selectedPack = packIdx;
+    renderPacks();
+    invalidateSummary();
+  });
 });
 document.querySelectorAll('[data-open-order]').forEach(button => button.addEventListener('click', () => {
   lastTrigger = button;

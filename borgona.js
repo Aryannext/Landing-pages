@@ -1,15 +1,59 @@
 const galleryImage = document.querySelector('#gallery-image');
-const thumbnails = document.querySelectorAll('[data-gallery]');
+const thumbnails = Array.from(document.querySelectorAll('[data-gallery]'));
+const galleryDots = Array.from(document.querySelectorAll('.gallery-dots .dot'));
 
-for (const thumbnail of thumbnails) {
-  thumbnail.addEventListener('click', () => {
-    galleryImage.src = 'assets/' + thumbnail.dataset.gallery;
-    galleryImage.alt = thumbnail.getAttribute('aria-label').replace('Ver ', '');
-    for (const option of thumbnails) {
-      option.setAttribute('aria-pressed', String(option === thumbnail));
-    }
+let currentGalleryIdx = 0;
+let galleryTimer = null;
+
+function setGallerySlide(index) {
+  if (!thumbnails.length || !galleryImage) return;
+  currentGalleryIdx = (index + thumbnails.length) % thumbnails.length;
+  const currentThumb = thumbnails[currentGalleryIdx];
+
+  galleryImage.style.opacity = '0.35';
+  setTimeout(() => {
+    galleryImage.src = 'assets/' + currentThumb.dataset.gallery;
+    const label = currentThumb.getAttribute('aria-label');
+    if (label) galleryImage.alt = label.replace('Ver ', '');
+    galleryImage.style.opacity = '1';
+  }, 120);
+
+  thumbnails.forEach((t, i) => {
+    t.setAttribute('aria-pressed', String(i === currentGalleryIdx));
+  });
+
+  galleryDots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentGalleryIdx);
   });
 }
+
+function startGalleryAutoPlay() {
+  if (galleryTimer) clearInterval(galleryTimer);
+  galleryTimer = setInterval(() => {
+    const dialog = document.querySelector('#order-dialog');
+    if (!document.hidden && (!dialog || !dialog.open)) {
+      setGallerySlide(currentGalleryIdx + 1);
+    }
+  }, 3500);
+}
+
+thumbnails.forEach((thumbnail, idx) => {
+  thumbnail.addEventListener('click', () => {
+    setGallerySlide(idx);
+    clearInterval(galleryTimer);
+    setTimeout(startGalleryAutoPlay, 7000);
+  });
+});
+
+galleryDots.forEach((dot, idx) => {
+  dot.addEventListener('click', () => {
+    setGallerySlide(idx);
+    clearInterval(galleryTimer);
+    setTimeout(startGalleryAutoPlay, 7000);
+  });
+});
+
+startGalleryAutoPlay();
 
 const demoEndsAt = Date.now() + 86399000;
 function updateDemoClock() {
@@ -104,7 +148,7 @@ const highlights = [
   ...highlightsFor('#reviews-title, .review-grid article', rise, 440),
   ...highlightsFor('.review-grid .stars', gleam, 540),
   ...highlightsFor('.guarantee-seal', gleam, 720),
-  ...highlightsFor('.guarantee h2', rise, 440),
+  ...highlightsFor('#guarantee-title', rise, 440),
   ...highlightsFor('.final-cta .cta', forwardPulse(12, .54), 1150, true),
 ];
 
