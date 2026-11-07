@@ -46,19 +46,26 @@ document.querySelector('#packs').addEventListener('click', event => {
   invalidateSummary();
   document.querySelector(`[data-pack="${selectedPack}"]`).focus({ preventScroll: true });
   // Also sync landing page card elevation
-  document.querySelectorAll('[data-pack-card]').forEach(c => {
-    c.classList.toggle('is-selected', Number(c.dataset.packCard) === selectedPack);
-  });
+  updateLandingCardsState();
 });
 
-// Interactive elevation and selection for landing page offer cards
+function updateLandingCardsState() {
+  document.querySelectorAll('[data-pack-card]').forEach(card => {
+    const isSelected = Number(card.dataset.packCard) === selectedPack;
+    card.classList.toggle('is-selected', isSelected);
+    const btnText = card.querySelector('.btn-text');
+    if (btnText) {
+      btnText.textContent = isSelected ? 'Seleccionado ✓' : 'Elegir';
+    }
+  });
+}
+
+// Interactive elevation and golden selection for landing page offer cards
 const landingOfferCards = document.querySelectorAll('[data-pack-card]');
 landingOfferCards.forEach(card => {
   card.addEventListener('click', () => {
-    const packIdx = Number(card.dataset.packCard);
-    landingOfferCards.forEach(c => c.classList.remove('is-selected'));
-    card.classList.add('is-selected');
-    selectedPack = packIdx;
+    selectedPack = Number(card.dataset.packCard);
+    updateLandingCardsState();
     renderPacks();
     invalidateSummary();
   });
