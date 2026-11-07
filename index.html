@@ -7,9 +7,9 @@
   <meta name="description" content="Copa de bienestar íntimo masculino. Envío incluido en Colombia y pago contra entrega.">
   <title>Copa de bienestar íntimo masculino</title>
   <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="borgona.css?v=lux-3">
+  <link rel="stylesheet" href="borgona.css?v=lux-4">
   <script type="module" src="app.js?v=lux-3"></script>
-  <script type="module" src="borgona.js?v=lux-3"></script>
+  <script type="module" src="borgona.js?v=lux-4"></script>
 </head>
 <body>
 <main id="landing" class="borgona-page">
@@ -21,7 +21,7 @@
       <p class="hero-description">Diseñado para brindarte una experiencia única, con texturas realistas y un canal envolvente que se adapta a ti.</p>
     </div>
     <div class="hero-art">
-      <div class="generation"><span class="icon icon-crown" aria-hidden="true"></span><span>Nueva<br>generación</span></div>
+      <div class="generation"><img class="crown" src="assets/corona_dorada.svg" alt="" width="64" height="48"><span class="gen-text">Nueva<br>generación</span></div>
       <img class="hero-cup" src="assets/velio-cutout-v2.png" alt="Copa de bienestar íntimo color crema" width="953" height="1650" fetchpriority="high">
       <ul class="hero-features"><li><span class="icon icon-feather" aria-hidden="true"></span><span>Suave<br>al tacto</span></li><li><span class="icon icon-layers" aria-hidden="true"></span><span>Textura<br>realista</span></li><li><span class="icon icon-mute" aria-hidden="true"></span><span>Silenciosa<br>y discreta</span></li></ul>
     </div>
@@ -68,7 +68,7 @@
       </article>
 
       <article class="offer offer-2 is-selected" data-pack-card="1">
-        <div class="popular"><span class="icon icon-crown" aria-hidden="true"></span> Más popular</div>
+        <div class="popular"><img class="crown" src="assets/corona_dorada.svg" alt="" width="64" height="48"><span>Más popular</span></div>
         <div class="offer-header">
           <span class="offer-tier-tag">Recomendado</span>
           <h3 class="offer-title">2 Unidades</h3>
@@ -79,7 +79,7 @@
         </div>
         <div class="offer-cost">
           <strong class="offer-price" data-price="2">$119.900</strong>
-          <span class="offer-saving" data-saving="2">Ahorras $19.900</span>
+          <span class="offer-regular"><del data-compare="2">$139.800</del></span>
         </div>
         <button class="offer-button" type="button" data-open-order data-order-pack="1" aria-label="Elegir 2 unidades por $119.900">
           <span class="icon icon-cart" aria-hidden="true"></span><span class="btn-text">Seleccionado ✓</span>
@@ -98,7 +98,7 @@
         </div>
         <div class="offer-cost">
           <strong class="offer-price" data-price="3">$159.900</strong>
-          <span class="offer-saving" data-saving="3">Ahorras $49.800</span>
+          <span class="offer-regular"><del data-compare="3">$209.700</del></span>
         </div>
         <button class="offer-button" type="button" data-open-order data-order-pack="2" aria-label="Elegir 3 unidades por $159.900">
           <span class="icon icon-cart" aria-hidden="true"></span><span class="btn-text">Elegir</span>
@@ -106,7 +106,8 @@
       </article>
     </div>
   </section>
-    <ul class="services"><li><span class="icon icon-truck" aria-hidden="true"></span><span>Envío discreto<br>a todo el país</span></li><li><span class="icon icon-shield" aria-hidden="true"></span><span>Pago contra<br>entrega</span></li><li><span class="icon icon-box" aria-hidden="true"></span><span>Empaque<br>confidencial</span></li><li><span class="icon icon-check" aria-hidden="true"></span><span>Garantía de<br>30 días hábiles</span></li></ul>
+
+  <div class="gold-divider" role="presentation" aria-hidden="true"><span></span></div>
 
   <section class="reviews" aria-labelledby="reviews-title">
     <div class="reviews-header">
@@ -156,13 +157,12 @@
 
 <nav class="sticky-bar" aria-label="Compra rápida">
   <div class="sticky-bar-content">
-    <div class="sticky-bar-info">
-      <span class="icon icon-truck" aria-hidden="true"></span>
-      <div class="sticky-bar-text">
-        <strong>Envío discreto a toda Colombia</strong>
-        <small>Pago contra entrega disponible</small>
-      </div>
-    </div>
+    <ul class="sticky-trust">
+      <li><span class="icon icon-truck" aria-hidden="true"></span><span>Envío discreto<br>a todo el país</span></li>
+      <li><span class="icon icon-shield" aria-hidden="true"></span><span>Pago contra<br>entrega</span></li>
+      <li class="sticky-trust-extra"><span class="icon icon-box" aria-hidden="true"></span><span>Empaque<br>confidencial</span></li>
+      <li><span class="icon icon-check" aria-hidden="true"></span><span>Garantía de<br>30 días hábiles</span></li>
+    </ul>
     <button class="cta sticky-cta-button" data-open-order type="button">
       <span class="icon icon-cart" aria-hidden="true"></span>
       <span>¡Lo quiero ahora!</span>
