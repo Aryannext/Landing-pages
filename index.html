@@ -7,9 +7,9 @@
   <meta name="description" content="Copa de bienestar íntimo masculino. Envío incluido en Colombia y pago contra entrega.">
   <title>Copa de bienestar íntimo masculino</title>
   <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="borgona.css?v=lux-5">
-  <script type="module" src="app.js?v=lux-5"></script>
-  <script type="module" src="borgona.js?v=lux-5"></script>
+  <link rel="stylesheet" href="borgona.css?v=lux-8">
+  <script type="module" src="app.js?v=lux-8"></script>
+  <script type="module" src="borgona.js?v=lux-8"></script>
 </head>
 <body>
 <main id="landing" class="borgona-page">
@@ -114,32 +114,60 @@
       <h2 id="reviews-title">Lo que dicen nuestros clientes</h2>
       <p class="review-rating"><span class="stars" aria-hidden="true">★★★★★</span> <strong>4.9 / 5</strong> · Más de 1.200 valoraciones en Colombia</p>
     </div>
-    <div class="review-grid">
-      <article>
-        <div class="review-top">
-          <div class="stars" aria-hidden="true">★★★★★</div>
-          <span class="verified-tag"><span class="icon icon-check" aria-hidden="true"></span> Compra verificada</span>
-        </div>
-        <blockquote>“Excelente calidad, muy discreto y realista. Superó mis expectativas en todos los sentidos.”</blockquote>
-        <p class="reviewer"><span class="icon icon-person" aria-hidden="true"></span> Carlos M. <small>· Bogotá</small></p>
-      </article>
-      <article>
-        <div class="review-top">
-          <div class="stars" aria-hidden="true">★★★★★</div>
-          <span class="verified-tag"><span class="icon icon-check" aria-hidden="true"></span> Compra verificada</span>
-        </div>
-        <blockquote>“Es cómodo, fácil de limpiar y el material se siente increíble. Llegó súper rápido y bien sellado.”</blockquote>
-        <p class="reviewer"><span class="icon icon-person" aria-hidden="true"></span> Andrés R. <small>· Medellín</small></p>
-      </article>
-      <article class="privacy-highlight-card">
-        <div class="privacy-top">
-          <span class="icon icon-box" aria-hidden="true"></span>
-          <h3>Tu privacidad es nuestra prioridad</h3>
-        </div>
-        <blockquote>Todos nuestros empaques son 100% discretos, opacos y sellados, sin imágenes ni referencias al contenido.</blockquote>
-        <span class="privacy-badge"><span class="icon icon-lock" aria-hidden="true"></span> Envío 100% confidencial</span>
-      </article>
+    <div class="reviews-rotator" id="reviews-rotator" aria-label="Opiniones de clientes">
+      <div class="reviews-feed-header">
+        <span class="reviews-live-badge"><span class="live-dot-pulse"></span> Comentarios en tiempo real</span>
+        <span class="reviews-speed-text">Verificados por WhatsApp</span>
+      </div>
+      <div class="reviews-stream-stage" id="reviews-stage">
+        <article class="review-card review-msg-card">
+          <div class="review-top">
+            <div class="stars" aria-hidden="true">★★★★★</div>
+            <div class="review-meta-badges">
+              <span class="verified-tag"><span class="icon icon-check" aria-hidden="true"></span> Compra verificada</span>
+              <span class="review-time-tag"><span class="msg-dot" aria-hidden="true"></span> Hace 4 min</span>
+            </div>
+          </div>
+          <blockquote>“Excelente calidad, muy discreto y realista. Superó mis expectativas en todos los sentidos.”</blockquote>
+          <div class="review-bottom">
+            <p class="reviewer"><span class="icon icon-person" aria-hidden="true"></span> Carlos M. <small>· Bogotá</small></p>
+            <span class="review-channel-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg> Confirmado</span>
+          </div>
+        </article>
+        <article class="review-card review-msg-card">
+          <div class="review-top">
+            <div class="stars" aria-hidden="true">★★★★★</div>
+            <div class="review-meta-badges">
+              <span class="verified-tag"><span class="icon icon-check" aria-hidden="true"></span> Compra verificada</span>
+              <span class="review-time-tag"><span class="msg-dot" aria-hidden="true"></span> Hace 12 min</span>
+            </div>
+          </div>
+          <blockquote>“Es cómodo, fácil de limpiar y el material se siente increíble. Llegó súper rápido y bien sellado.”</blockquote>
+          <div class="review-bottom">
+            <p class="reviewer"><span class="icon icon-person" aria-hidden="true"></span> Andrés R. <small>· Medellín</small></p>
+            <span class="review-channel-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2z"/></svg> Confirmado</span>
+          </div>
+        </article>
+      </div>
+      <div class="reviews-rotator-nav">
+        <button type="button" class="reviews-arrow prev" id="reviews-prev" aria-label="Opinión anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="reviews-dots" id="reviews-dots" role="tablist" aria-label="Seleccionar opinión"></div>
+        <button type="button" class="reviews-arrow next" id="reviews-next" aria-label="Siguiente opinión">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
     </div>
+
+    <article class="privacy-highlight-card reviews-privacy-card">
+      <div class="privacy-top">
+        <span class="icon icon-box" aria-hidden="true"></span>
+        <h3>Tu privacidad es nuestra prioridad</h3>
+      </div>
+      <blockquote>Todos nuestros empaques son 100% discretos, opacos y sellados, sin imágenes ni referencias al contenido del producto.</blockquote>
+      <span class="privacy-badge"><span class="icon icon-lock" aria-hidden="true"></span> Envío 100% confidencial a toda Colombia</span>
+    </article>
   </section>
 
   <section class="guarantee" aria-labelledby="guarantee-title">
@@ -202,10 +230,55 @@
       <div class="input-wrap"><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/location_on.png" alt="" width="22" height="22"></span><input id="address" name="address" autocomplete="street-address" placeholder="Ej: Calle 30 #8-54 Barrio Pino" required minlength="5"></div>
       <label for="neighborhood">Escribir BARRIO - #APTO - TORRE - CONJUNTO <b>*</b></label>
       <div class="input-wrap"><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/location_on.png" alt="" width="22" height="22"></span><input id="neighborhood" name="neighborhood" placeholder="Ej: Barrio Sucre - Apto 101 - Torre 5" required></div>
-      <label for="department">Departamento <b>*</b></label>
-      <select id="department" name="department" autocomplete="address-level1" required><option value="">Departamento</option></select>
-      <label for="city">Ciudad <b>*</b></label>
-      <select id="city" name="city" autocomplete="address-level2" required><option value="">Ciudad</option></select>
+      <label id="department-label" for="department">Departamento <b>*</b></label>
+      <div class="custom-select-wrap" data-custom-select="department">
+        <button type="button" class="custom-select-trigger" id="department-trigger" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="department-label">
+          <span class="custom-select-prefix" aria-hidden="true"><img src="assets/order-icons/location_on.png" alt="" width="18" height="18"></span>
+          <span class="custom-select-label">Selecciona tu departamento</span>
+          <span class="custom-select-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </span>
+        </button>
+        <div class="custom-select-dropdown" hidden>
+          <div class="custom-select-search-wrap">
+            <span class="custom-search-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <input type="text" class="custom-select-search" placeholder="Escribe para buscar departamento..." autocomplete="off">
+            <button type="button" class="custom-search-clear" aria-label="Limpiar búsqueda" hidden>×</button>
+          </div>
+          <ul class="custom-select-options" role="listbox" tabindex="-1"></ul>
+          <p class="custom-select-empty" hidden>No encontramos ese departamento</p>
+        </div>
+        <select id="department" name="department" autocomplete="address-level1" class="custom-native-select">
+          <option value="">Departamento</option>
+        </select>
+      </div>
+
+      <label id="city-label" for="city">Ciudad <b>*</b></label>
+      <div class="custom-select-wrap is-disabled" data-custom-select="city">
+        <button type="button" class="custom-select-trigger" id="city-trigger" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="city-label" disabled>
+          <span class="custom-select-prefix" aria-hidden="true"><img src="assets/order-icons/location_on.png" alt="" width="18" height="18"></span>
+          <span class="custom-select-label">Selecciona primero un departamento</span>
+          <span class="custom-select-chevron" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </span>
+        </button>
+        <div class="custom-select-dropdown" hidden>
+          <div class="custom-select-search-wrap">
+            <span class="custom-search-icon" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <input type="text" class="custom-select-search" placeholder="Escribe para buscar ciudad..." autocomplete="off">
+            <button type="button" class="custom-search-clear" aria-label="Limpiar búsqueda" hidden>×</button>
+          </div>
+          <ul class="custom-select-options" role="listbox" tabindex="-1"></ul>
+          <p class="custom-select-empty" hidden>No encontramos esa ciudad</p>
+        </div>
+        <select id="city" name="city" autocomplete="address-level2" class="custom-native-select">
+          <option value="">Ciudad</option>
+        </select>
+      </div>
       <label for="phone">Teléfono con WhatsApp <b>*</b></label>
       <div class="input-wrap"><span class="order-symbol" aria-hidden="true"><img src="assets/order-icons/call.png" alt="" width="22" height="22"></span><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Teléfono con WhatsApp" required></div>
       <label for="email">Correo electrónico</label>

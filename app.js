@@ -117,23 +117,228 @@ function showOrderStep(step, animate = true) {
 document.querySelector('#order-next').addEventListener('click', () => showOrderStep(2));
 document.querySelector('#order-back').addEventListener('click', () => showOrderStep(1));
 document.querySelectorAll('dialog .close-modal').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
-orderDialog.addEventListener('close', () => lastTrigger?.focus({ preventScroll: true }));
+function closeAllDropdowns() {
+  document.querySelectorAll('.custom-select-wrap.is-open').forEach(w => {
+    w.classList.remove('is-open');
+    const d = w.querySelector('.custom-select-dropdown');
+    if (d) d.hidden = true;
+    const t = w.querySelector('.custom-select-trigger');
+    if (t) t.setAttribute('aria-expanded', 'false');
+  });
+}
+document.addEventListener('click', event => {
+  if (!event.target.closest('.custom-select-wrap')) closeAllDropdowns();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeAllDropdowns();
+});
+orderDialog.addEventListener('close', () => {
+  lastTrigger?.focus({ preventScroll: true });
+  closeAllDropdowns();
+});
 orderDialog.addEventListener('click', event => {
   const rect = orderDialog.getBoundingClientRect();
   if (event.target === orderDialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) orderDialog.close();
 });
+
+function setupSearchableSelect({ selectId, placeholder, onSelect }) {
+  const nativeSelect = document.querySelector(`#${selectId}`);
+  const wrap = document.querySelector(`[data-custom-select="${selectId}"]`);
+  if (!nativeSelect || !wrap) return null;
+
+  const trigger = wrap.querySelector('.custom-select-trigger');
+  const label = wrap.querySelector('.custom-select-label');
+  const dropdown = wrap.querySelector('.custom-select-dropdown');
+  const searchInput = wrap.querySelector('.custom-select-search');
+  const clearBtn = wrap.querySelector('.custom-search-clear');
+  const optionsList = wrap.querySelector('.custom-select-options');
+  const emptyState = wrap.querySelector('.custom-select-empty');
+
+  let allOptions = [];
+
+  function normalize(str) {
+    return (str || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  function updateFromNative() {
+    allOptions = Array.from(nativeSelect.options)
+      .filter(opt => opt.value !== '')
+      .map(opt => ({ value: opt.value, text: opt.text }));
+
+    const selected = nativeSelect.value;
+    if (selected) {
+      label.textContent = selected;
+      label.classList.add('has-value');
+    } else {
+      label.textContent = placeholder;
+      label.classList.remove('has-value');
+    }
+
+    renderOptions(allOptions);
+  }
+
+  function renderOptions(items) {
+    if (!items.length) {
+      optionsList.innerHTML = '';
+      emptyState.hidden = false;
+      return;
+    }
+    emptyState.hidden = true;
+    const currentVal = nativeSelect.value;
+    optionsList.innerHTML = items.map(item => `
+      <li class="custom-select-option ${item.value === currentVal ? 'is-selected' : ''}" data-value="${item.value}" role="option" aria-selected="${item.value === currentVal}">
+        <span class="option-text">${item.text}</span>
+        ${item.value === currentVal ? '<span class="option-check" aria-hidden="true">✓</span>' : ''}
+      </li>
+    `).join('');
+
+    optionsList.querySelectorAll('.custom-select-option').forEach(li => {
+      li.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectValue(li.dataset.value);
+      });
+    });
+  }
+
+  function filterOptions(query) {
+    const q = normalize(query);
+    if (!q) {
+      renderOptions(allOptions);
+      return;
+    }
+    const filtered = allOptions.filter(item => normalize(item.text).includes(q));
+    renderOptions(filtered);
+  }
+
+  function selectValue(value) {
+    nativeSelect.value = value;
+    nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    nativeSelect.dispatchEvent(new Event('input', { bubbles: true }));
+    label.textContent = value;
+    label.classList.add('has-value');
+    close();
+    if (onSelect) onSelect(value);
+  }
+
+  function open() {
+    if (trigger.disabled) return;
+    document.querySelectorAll('.custom-select-wrap.is-open').forEach(w => {
+      if (w !== wrap) {
+        w.classList.remove('is-open');
+        const d = w.querySelector('.custom-select-dropdown');
+        if (d) d.hidden = true;
+        const t = w.querySelector('.custom-select-trigger');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    wrap.classList.add('is-open');
+    dropdown.hidden = false;
+    trigger.setAttribute('aria-expanded', 'true');
+    searchInput.value = '';
+    if (clearBtn) clearBtn.hidden = true;
+    filterOptions('');
+    setTimeout(() => searchInput.focus(), 80);
+  }
+
+  function close() {
+    wrap.classList.remove('is-open');
+    dropdown.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (wrap.classList.contains('is-open')) close();
+    else open();
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    filterOptions(e.target.value);
+    if (clearBtn) clearBtn.hidden = !e.target.value;
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      searchInput.value = '';
+      clearBtn.hidden = true;
+      filterOptions('');
+      searchInput.focus();
+    });
+  }
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const firstOption = optionsList.querySelector('.custom-select-option');
+      if (firstOption) selectValue(firstOption.dataset.value);
+    }
+  });
+
+  return {
+    updateFromNative,
+    open,
+    close,
+    setDisabled: (disabled) => {
+      trigger.disabled = disabled;
+      wrap.classList.toggle('is-disabled', disabled);
+      if (disabled) close();
+    },
+    setPlaceholder: (txt) => {
+      placeholder = txt;
+      if (!nativeSelect.value) {
+        label.textContent = txt;
+        label.classList.remove('has-value');
+      }
+    }
+  };
+}
+
 const departments = document.querySelector('#department');
 const cities = document.querySelector('#city');
+
+const citySelect = setupSearchableSelect({
+  selectId: 'city',
+  placeholder: 'Selecciona primero un departamento'
+});
+if (citySelect) citySelect.setDisabled(true);
+
+const deptSelect = setupSearchableSelect({
+  selectId: 'department',
+  placeholder: 'Selecciona tu departamento',
+  onSelect: () => {
+    if (citySelect) {
+      citySelect.setDisabled(false);
+      citySelect.setPlaceholder('Selecciona tu ciudad');
+      setTimeout(() => {
+        citySelect.updateFromNative();
+        citySelect.open();
+      }, 120);
+    }
+  }
+});
+
 fetch('assets/colombia.json').then(response => {
   if (!response.ok) throw new Error('No se pudo cargar el listado de ciudades.');
   return response.json();
 }).then(data => {
   locations = data;
   Object.keys(data).sort((a, b) => a.localeCompare(b, 'es')).forEach(name => departments.add(new Option(name, name)));
+  if (deptSelect) deptSelect.updateFromNative();
 }).catch(() => feedback('No se pudo cargar el listado de ciudades. Vuelve a cargar la página.'));
+
 departments.addEventListener('change', () => {
   cities.replaceChildren(new Option('Ciudad', ''));
   (locations[departments.value] || []).forEach(name => cities.add(new Option(name, name)));
+  if (citySelect) {
+    citySelect.updateFromNative();
+  }
 });
 document.querySelector('#phone').addEventListener('input', event => event.target.setCustomValidity(''));
 orderForm.addEventListener('input', invalidateSummary);
